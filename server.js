@@ -15,7 +15,9 @@ app.post("/api/notes", (req, res) => {
         const updatedData = JSON.parse(data);
         updatedData.push(req.body);
         console.log(updatedData);
-
+        fs.writeFile("./db/db.json", JSON.stringify(receivedData), (err) => {
+            if (err) throw err;
+        });
     })
   });
 
