@@ -6,6 +6,11 @@ const PORT = process.env.PORT || 8080;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get("/api/notes", (req, res) => {
+    res.sendFile(path.join(__dirname, "./db/db.json"));
+});
 
 app.post("/api/notes", (req, res) => {
     console.log(req.body)
@@ -18,10 +23,8 @@ app.post("/api/notes", (req, res) => {
                 message: "Unable to retrieve notes.",
             });
         }
-        console.log(data);
         const updatedData = JSON.parse(data);
         updatedData.push(req.body);
-        console.log(updatedData);
         fs.writeFile("./db/db.json", JSON.stringify(receivedData), (err) => {
             if (err) throw err;
             res.json({
@@ -31,7 +34,7 @@ app.post("/api/notes", (req, res) => {
             })
         });
     })
-  });
+});
 
 app.listen(PORT, () => {
     console.log(`Currently running on http://localhost:${PORT}`);
